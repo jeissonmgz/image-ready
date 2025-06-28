@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
+import Anchor from '../components/Anchor.astro';
+import Logo from './Logo.astro';
+
+export const formatsSupported = [
+	{ format: 'webp', mymetype: 'image/webp' },
+	{ format: 'png', mymetype: 'image/png' },
+	{ format: 'jpeg', mymetype: 'image/jpeg' },
+];
+
+interface Props {
+    texts: {
+        language: string,
+        title: string,
+        featureConvert: {
+			title: string,
+		},
+        copyright: string,
+    }
+}
+const { texts } = Astro.props;
+---
+
+<Layout title="Image is ready for work" language={texts.language}>
+	<div class="min-h-screen text-gray-800">
+		<main class="w-full pt-4 lg:pt-0 flex flex-col items-center">
+			<section class="flex flex-col items-center lg:max-w-md px-4 justify-center gap-4">
+				<div class="flex flex-col items-center gap-2">
+					<Logo lang={texts.language} />
+					<div class="rounded-full circle"></div>
+					<h1
+						class="text-center lg:text-left font-bold text-4xl leading-12 bg-gradient-to-br from-action-dark to-action-light bg-clip-text text-transparent-fill"
+					>
+						{texts.title}
+					</h1>
+				</div>
+				<p>{texts.featureConvert.title}</p>
+				<div class="flex gap-4 py-4">
+					{
+						formatsSupported.map((item) => (
+							<Anchor target="_self" href={`/convert/${item.format}`} size="lg" lang={texts.language}>
+								{item.format}
+							</Anchor>
+						))
+					}
+				</div>
+			</section>
+		<footer class="text-center py-8 text-sm text-gray-500">
+			&copy; 2025 Readyfor.work - {texts.copyright}
+		</footer>
+	</div>
+
+</Layout>

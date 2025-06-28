@@ -13,3 +13,70 @@
     --color-action-light: #56E589;
     --color-action-text: #212121;
 }
+
+main {
+    @apply bg-background text-default;
+}
+
+.circle {
+    background-color: #212121;
+    box-shadow:
+        28px 28px 50px rgba(255, 255, 255, 0.16),
+        /* Sombra clara exterior */
+        inset 26px 26px 48px rgba(255, 255, 255, 0.16),
+        /* Sombra clara interior */
+        inset -31px -31px 43px rgba(255, 255, 255, 0.64),
+        /* Sombra más pronunciada interior */
+        inset -23px -23px 45px rgba(255, 255, 255, 1);
+    /* Sombra fuerte interior */
+}
+
+.pressed {
+    @apply bg-gradient-to-br from-background-dark to-background-light;
+
+    box-shadow:
+        inset 4px 4px 8px rgb(0, 0, 0, 0.4),
+        inset -4px -4px 8px rgb(255, 255, 255, 0.2),
+        4px 4px 8px rgb(0, 0, 0, 0.1),
+        -4px -4px 8px rgb(255, 255, 255, 0.1);
+}
+
+.pressed:hover {
+    @apply bg-gradient-to-tl;
+}
+
+.outer-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    @apply bg-gradient-to-br from-background-dark to-background-light;
+    box-shadow:
+        inset 4px 4px 8px rgb(0, 0, 0, 0.4),
+        inset -4px -4px 8px rgb(255, 255, 255, 0.2),
+        4px 4px 8px rgb(0, 0, 0, 0.1),
+        -4px -4px 8px rgb(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    @apply bg-background;
+    box-shadow:
+        8px 8px 16px rgb(0, 0, 0, 0.5),
+        -8px -8px 16px rgb(255, 255, 255, 0.3);
+}
+
+.text-transparent-fill {
+    -webkit-text-fill-color: transparent;
+}
+
+.card {
+    @apply bg-background;
+    box-shadow:
+        8px 8px 16px rgb(0, 0, 0, 0.5),
+        -8px -8px 16px rgb(255, 255, 255, 0.1);
+}
