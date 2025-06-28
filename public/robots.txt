@@ -1,4 +1,2 @@
 User-agent: *
-Allow: /
-
-Sitemap: https://image.isreadyfor.work/sitemap-index.xml
+Disallow: /
