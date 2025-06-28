@@ -1,0 +1,34 @@
+---
+import Convert from '../../../components/Convert.astro';
+
+export const formatsSupported = [
+	{ format: 'webp', mymetype: 'image/webp' },
+	{ format: 'png', mymetype: 'image/png' },
+	{ format: 'jpeg', mymetype: 'image/jpeg' },
+];
+
+export function getStaticPaths() {
+	const staticPaths = formatsSupported.map(({ format, mymetype }) => ({
+		params: { format, mymetype },
+	}));
+	return staticPaths;
+}
+
+const texts = {
+	language: 'es',
+	title: 'Conversor de imágenes a',
+	subtitle1: 'Convierte tus imágenes de formato ',
+	subtitle2: ', etc. a',
+	subtitle3: 'y descarga tus imágenes. Gratis, rápido y seguro.',
+	convert: 'O convierte a:',
+	uploadTitle: 'Subir imágenes',
+	uploadMessage: 'Click para subir o arrastra y suelta',
+	uploadedTitle: 'Imágenes subidas',
+	uploadedButton: 'Descargar todo',
+	copyright: 'Todos los derechos reservados',
+};
+
+const { format, mymetype } = Astro.params;
+---
+
+<Convert format={format as string} mymetype={mymetype as string} texts={texts} />

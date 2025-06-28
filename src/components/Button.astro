@@ -17,12 +17,13 @@ const height = {
 <button
 	id={id}
 	disabled={disabled}
-	class={`neu-button px-8 px-4 disabled:bg-none bg-gradient-to-br from-cyan-600 to-purple-600 font-black ${height[size]}`}
+	class={`neu-button px-8 px-4 disabled:bg-none bg-gradient-to-br from-action-dark to-action-light font-bold ${height[size]}`}
 >
 	<slot />
 </button>
 
 <style>
+	@reference "../styles/global.css";
 	.neu-button {
 		display: flex;
 		-webkit-box-pack: center;
@@ -34,26 +35,26 @@ const height = {
 		align-items: center;
 		border: solid #404c5d 1px;
 		font-size: 16px;
-		color: #d6d6d6;
+		@apply text-action-text;
 		-webkit-transition: 500ms;
 		transition: 500ms;
 		border-radius: 5px;
 		-webkit-box-shadow:
-			4px 4px 16px rgb(0, 0, 0, 0.4),
-			-4px -4px 16px rgb(255, 255, 255, 0.4);
+			4px 4px 12px rgb(0, 0, 0, 0.4),
+			-4px -4px 12px rgb(255, 255, 255, 0.2);
 		box-shadow:
-			4px 4px 16px rgb(0, 0, 0, 0.4),
-			-4px -4px 16px rgb(255, 255, 255, 0.4);
+			4px 4px 12px rgb(0, 0, 0, 0.4),
+			-4px -4px 12px rgb(255, 255, 255, 0.2);
 	}
 
 	.neu-button:not(:disabled):hover {
 		-webkit-box-shadow:
-			2px 2px 14px rgb(0, 0, 0, 0.5),
-			-2px -2px 14px rgb(255, 255, 255, 0.5);
+			4px 4px 12px rgb(0, 0, 0, 0.5),
+			-4px -4px 12px rgb(255, 255, 255, 0.4);
 		box-shadow:
-			2px 2px 14px rgb(0, 0, 0, 0.5),
-			-2px -2px 14px rgb(255, 255, 255, 0.5);
-		color: white;
+			4px 4px 12px rgb(0, 0, 0, 0.5),
+			-4px -4px 12px rgb(255, 255, 255, 0.4);
+		@apply text-action-text;
 		-webkit-transition: 500ms;
 		transition: 500ms;
 	}
@@ -62,7 +63,7 @@ const height = {
 		box-shadow:
 			inset 2px 2px 4px rgb(0, 0, 0, 0.2),
 			inset -2px -2px 4px rgb(255, 255, 255, 0.2);
-		color: white;
+		@apply text-default;
 		-webkit-transition: 100ms;
 		transition: 100ms;
 	}

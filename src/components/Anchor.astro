@@ -1,11 +1,14 @@
 ---
 interface Props {
+	lang: string;
 	href: string;
 	size?: 'sm' | 'md' | 'lg';
 	target: '_blank' | '_parent' | '_self' | '_top';
 }
 
-const { href, target, size = 'md' } = Astro.props;
+const { href, target, size = 'md', lang } = Astro.props;
+
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 const height = {
 	sm: 'h-6',
@@ -15,18 +18,18 @@ const height = {
 ---
 
 <a
-	class={`neu-button bg-gradient-to-br from-cyan-600 to-purple-600 font-black ${height[size]} disabled:bg-gray-400`}
-	href={href}
+	class={`neu-button bg-action font-bold ${height[size]} disabled:bg-gray-400`}
+	href={`${getRelativeLocaleUrl(lang, href)}`}
 	target={target}
 >
 	<slot />
 </a>
 
 <style>
+	@reference "../styles/global.css";
 	.neu-button {
+		@apply px-4 py-2;
 		display: flex;
-		margin: 5px;
-		width: 120px;
 		-webkit-box-pack: center;
 		-ms-flex-pack: center;
 		justify-content: center;
@@ -34,32 +37,29 @@ const height = {
 		-webkit-box-align: center;
 		-ms-flex-align: center;
 		align-items: center;
-		font-family:
-			Consolas,
-			Courier New,
-			monospace;
 		border: solid #404c5d 1px;
 		font-size: 16px;
-		color: #d6d6d6;
+		@apply text-action-text;
 		-webkit-transition: 500ms;
 		transition: 500ms;
 		border-radius: 5px;
 		-webkit-box-shadow:
 			4px 4px 16px rgb(0, 0, 0, 0.4),
-			-4px -4px 16px rgb(255, 255, 255, 0.4);
+			-4px -4px 16px rgb(255, 255, 255, 0.2);
 		box-shadow:
 			4px 4px 16px rgb(0, 0, 0, 0.4),
-			-4px -4px 16px rgb(255, 255, 255, 0.4);
+			-4px -4px 16px rgb(255, 255, 255, 0.2);
 	}
 
 	.neu-button:hover {
+		@apply bg-action-dark;
 		-webkit-box-shadow:
 			2px 2px 14px rgb(0, 0, 0, 0.5),
 			-2px -2px 14px rgb(255, 255, 255, 0.5);
 		box-shadow:
 			2px 2px 14px rgb(0, 0, 0, 0.5),
 			-2px -2px 14px rgb(255, 255, 255, 0.5);
-		color: white;
+		@apply text-action-text;
 		-webkit-transition: 500ms;
 		transition: 500ms;
 	}
@@ -71,7 +71,7 @@ const height = {
 		box-shadow:
 			4px 4px 16px rgb(0, 0, 0, 0.4),
 			-4px -4px 16px rgb(255, 255, 255, 0.4);
-		color: white;
+		@apply text-action-text;
 		-webkit-transition: 100ms;
 		transition: 100ms;
 	}
