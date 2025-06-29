@@ -20,7 +20,6 @@ interface Props {
 
 import '../styles/global.css';
 import Layout from '../layouts/Layout.astro';
-import Avatar from '../assets/logo.svg';
 import Anchor from '../components/Anchor.astro';
 import Carousel from "../components/Carousel.astro";
 import Button from "../components/Button.astro";
@@ -44,7 +43,7 @@ export const formatsOriginals = [
 const { format, mymetype, texts } = Astro.props;
 ---
 
-<Layout title={`${texts.title} ${format}`} language={texts.language}>
+<Layout title={`${texts.title} ${format}`} language={texts.language} description={texts.title}>
 <div
 	id="app"
 	class="min-h-screen"

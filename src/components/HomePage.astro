@@ -23,7 +23,7 @@ interface Props {
 const { texts } = Astro.props;
 ---
 
-<Layout title="Image is ready for work" language={texts.language}>
+<Layout title="Image is ready for work" language={texts.language} description={texts.title}>
 	<div class="min-h-screen text-gray-800">
 		<main class="w-full pt-4 lg:pt-0 flex flex-col items-center">
 			<section class="flex flex-col items-center lg:max-w-md px-4 justify-center gap-4">
@@ -47,7 +47,7 @@ const { texts } = Astro.props;
 					}
 				</div>
 			</section>
-		<footer class="text-center py-8 text-sm text-gray-500">
+		<footer class="text-center py-8 text-sm text-neutral">
 			&copy; 2025 Readyfor.work - {texts.copyright}
 		</footer>
 	</div>
