@@ -11,14 +11,14 @@ export const formatsSupported = [
 ];
 
 interface Props {
-    texts: {
-        language: string,
-        title: string,
-        featureConvert: {
-			title: string,
-		},
-        copyright: string,
-    }
+	texts: {
+		language: string;
+		title: string;
+		featureConvert: {
+			title: string;
+		};
+		copyright: string;
+	};
 }
 const { texts } = Astro.props;
 ---
@@ -40,16 +40,21 @@ const { texts } = Astro.props;
 				<div class="flex gap-4 py-4">
 					{
 						formatsSupported.map((item) => (
-							<Anchor target="_self" href={`/convert/${item.format}`} size="lg" lang={texts.language}>
+							<Anchor
+								target="_self"
+								href={`/convert/${item.format}`}
+								size="lg"
+								lang={texts.language}
+							>
 								{item.format}
 							</Anchor>
 						))
 					}
 				</div>
 			</section>
-		<footer class="text-center py-8 text-sm text-neutral">
-			&copy; 2025 Readyfor.work - {texts.copyright}
-		</footer>
+			<footer class="text-center py-8 text-sm text-neutral">
+				&copy; 2025 Readyfor.work - {texts.copyright}
+			</footer>
+		</main>
 	</div>
-
 </Layout>

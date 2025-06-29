@@ -1,0 +1,220 @@
+---
+interface Props {
+	texts: {
+		language: string;
+		title: string;
+		inputs: {
+			titleUpload: string;
+			uploadMessage: string;
+			uploadedTitle: string;
+			actionsTitle: string;
+			width: string;
+			height: string;
+			percentage: string;
+			pixels: string;
+			mantainAspect: string;
+			action: string;
+			download: string;
+		};
+		copyright: string;
+	};
+}
+export const formatsOriginals = ['webp', 'png', 'jpeg', 'svg', 'gif'];
+import Layout from '../layouts/Layout.astro';
+import Logo from './Logo.astro';
+const { texts } = Astro.props;
+---
+
+<Layout title={`${texts.title}`} language={texts.language} description={texts.title}>
+	<main class="w-full pt-4 lg:pt-0 flex justify-center">
+		<div class="flex flex-col lg:flex-row gap-8">
+			<section class="flex flex-col items-center lg:max-w-xs px-4 justify-center gap-4">
+				<div class="flex flex-col items-center gap-2">
+					<Logo lang={texts.language} />
+					<h1
+						class="text-center lg:text-left font-bold text-4xl leading-12 bg-gradient-to-br from-action-dark to-action-light bg-clip-text text-transparent-fill"
+					>
+						{texts.title}
+					</h1>
+				</div>
+			</section>
+			<div class="px-4">
+				<section class="pt-8 lg-pt-0">
+					<h2 class="text-primary tracking-wide font-bold text-3xl text-left my-4">
+						{texts.inputs.titleUpload}
+					</h2>
+					<div class="flex items-center justify-center w-full pressed rounded-3xl py-4">
+						<label
+							for="upload"
+							class="flex flex-col items-center justify-center w-full h-32 rounded-2xl cursor-pointer transition-colors"
+						>
+							<div class="flex flex-col items-center justify-center pt-5 pb-6">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="w-8 h-8 mb-4"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 16 16"
+								>
+									<path
+										d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M6.354 9.854a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 8.707V12.5a.5.5 0 0 1-1 0V8.707z"
+									></path>
+								</svg>
+								<p class="mb-2 text-m">
+									<span class="font-semibold">{texts.inputs.uploadMessage}</span>
+								</p>
+								<p class="text-xs"><p class="text-xs">{formatsOriginals.join(', ')}, etc.</p></p>
+							</div>
+							<input id="upload" multiple type="file" accept="image/*" class="hidden" />
+						</label>
+					</div>
+				</section>
+				<section class="pt-8 lg-pt-0" id="sectionUploads">
+					<h2 class="text-primary tracking-wide font-bold text-3xl text-left my-4">
+						{texts.inputs.actionsTitle}
+					</h2>
+					<label>
+						<input type="radio" name="mode" value="percent" checked />
+						{texts.inputs.percentage}
+					</label>
+					<input type="number" id="scalePercent" value="100" min="1" /> %
+					<br />
+
+					<label>
+						<input type="radio" name="mode" value="pixels" />
+						{texts.inputs.pixels}
+					</label>
+					<br />
+					{texts.inputs.width}: <input type="number" id="width" /> px
+					<br />
+					{texts.inputs.height}: <input type="number" id="height" /> px
+					<br />
+					<label>
+						<input type="checkbox" id="lockAspect" checked />
+						{texts.inputs.mantainAspect}
+					</label>
+					<br /><br />
+
+					<button id="scaleBtn">{texts.inputs.action}</button>
+					<button id="download">{texts.inputs.download}</button>
+				</section>
+				<section class="pt-8 lg-pt-0" id="sectionUploads">
+					<h2 class="text-primary tracking-wide font-bold text-3xl text-left my-4">
+						{texts.inputs.uploadedTitle}
+					</h2>
+					<div
+						style="width: 100%; max-width: 800px; max-height: 600px; overflow: auto; border: 2px solid #333;"
+					>
+						<div style="transform-origin: top left;" id="canvas-container">
+							<canvas id="canvas" style="border:1px solid #ccc;"></canvas>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</main>
+	<footer class="text-center py-8 text-sm text-neutral">
+		&copy; 2025 Readyfor.work - {texts.copyright}.
+	</footer>
+
+	<script>
+		const upload = document.getElementById('upload');
+		const canvas = document.getElementById('canvas');
+		const ctx = canvas.getContext('2d');
+
+		let originalImage = new Image();
+		let originalWidth = 0;
+		let originalHeight = 0;
+
+		upload.addEventListener('change', (e) => {
+			const file = e.target.files[0];
+			if (!file) return;
+
+			const reader = new FileReader();
+			reader.onload = (event) => {
+				originalImage.onload = () => {
+					originalWidth = originalImage.width;
+					originalHeight = originalImage.height;
+					drawImage(originalWidth, originalHeight);
+					document.getElementById('width').value = originalWidth;
+					document.getElementById('height').value = originalHeight;
+				};
+				originalImage.src = event.target.result;
+			};
+			reader.readAsDataURL(file);
+		});
+
+		function drawImage(width, height) {
+			canvas.width = width;
+			canvas.height = height;
+			ctx.drawImage(originalImage, 0, 0, width, height);
+		}
+
+		document.getElementById('scaleBtn').addEventListener('click', () => {
+			const mode = document.querySelector("input[name='mode']:checked").value;
+			let newWidth = originalWidth;
+			let newHeight = originalHeight;
+
+			if (mode === 'percent') {
+				const percent = parseFloat(document.getElementById('scalePercent').value) || 100;
+				newWidth = (originalWidth * percent) / 100;
+				newHeight = (originalHeight * percent) / 100;
+			} else {
+				const keepAspect = document.getElementById('lockAspect').checked;
+				const inputWidth = parseInt(document.getElementById('width').value) || originalWidth;
+				const inputHeight = parseInt(document.getElementById('height').value) || originalHeight;
+
+				if (keepAspect) {
+					const aspectRatio = originalHeight / originalWidth;
+					newWidth = inputWidth;
+					newHeight = Math.round(newWidth * aspectRatio);
+					document.getElementById('height').value = newHeight;
+				} else {
+					newWidth = inputWidth;
+					newHeight = inputHeight;
+				}
+			}
+
+			drawImage(newWidth, newHeight);
+		});
+
+		document.getElementById('download').addEventListener('click', () => {
+			const link = document.createElement('a');
+			link.download = 'imagen-escalada.png';
+			link.href = canvas.toDataURL('image/png');
+			link.click();
+		});
+
+		// Ajustar altura automáticamente si "mantener aspecto" está activo
+		document.getElementById('width').addEventListener('input', () => {
+			const keepAspect = document.getElementById('lockAspect').checked;
+			if (keepAspect && originalWidth && originalHeight) {
+				const inputWidth = parseInt(document.getElementById('width').value) || originalWidth;
+				const aspectRatio = originalHeight / originalWidth;
+				const autoHeight = Math.round(inputWidth * aspectRatio);
+				document.getElementById('height').value = autoHeight;
+			}
+		});
+	</script>
+	<script>
+		const container = document.getElementById('canvas-container');
+		let scale = 1;
+
+		function setZoom(newScale) {
+			scale = newScale;
+			container.style.transform = `scale(${scale})`;
+		}
+
+		// Zoom con la rueda del mouse
+		container.parentElement.addEventListener('wheel', (e) => {
+			e.preventDefault();
+			const delta = e.deltaY > 0 ? -0.1 : 0.1;
+			setZoom(Math.min(Math.max(0.5, scale + delta), 3));
+		});
+
+		// Puedes agregar botones opcionales
+		// Ejemplo:
+		// <button onclick="setZoom(scale + 0.1)">+</button>
+		// <button onclick="setZoom(scale - 0.1)">-</button>
+	</script>
+</Layout>

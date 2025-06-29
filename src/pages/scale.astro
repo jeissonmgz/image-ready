@@ -1,110 +1,24 @@
-<input type="file" id="upload" accept="image/*" />
-<br /><br />
+---
+import '../styles/global.css';
+import ScalePage from '../components/ScalePage.astro';
+const texts = {
+	language: 'es',
+	title: 'Escalar imágen',
+	inputs: {
+		titleUpload: 'Subir imágen',
+		uploadMessage: 'Click para subir o arrastra y suelta',
+		uploadedTitle: 'Imágen subida',
+		actionsTitle: 'Escalar',
+		width: 'Ancho',
+		height: 'Alto',
+		percentage: 'Escalar por porcentaje',
+		pixels: 'Escalar por pixeles',
+		mantainAspect: 'Mantener aspecto',
+		action: 'Escalar imágen',
+		download: 'Descargar imágen escalada',
+	},
+	copyright: 'All rights reserved.',
+};
+---
 
-<label>
-  <input type="radio" name="mode" value="percent" checked />
-  Escalar por porcentaje
-</label>
-<input type="number" id="scalePercent" value="100" min="1" /> %
-<br />
-
-<label>
-  <input type="radio" name="mode" value="pixels" />
-  Escalar por pixeles
-</label>
-<br />
-Ancho: <input type="number" id="width" /> px
-<br />
-Alto: <input type="number" id="height" /> px
-<br />
-<label>
-  <input type="checkbox" id="lockAspect" checked />
-  Mantener aspecto
-</label>
-<br /><br />
-
-<button id="scaleBtn">Escalar imagen</button>
-<button id="download">Descargar imagen escalada</button>
-
-<br /><br />
-<canvas id="canvas" style="border:1px solid #ccc;"></canvas>
-
-<script>
-  const upload = document.getElementById("upload");
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-
-  let originalImage = new Image();
-  let originalWidth = 0;
-  let originalHeight = 0;
-
-  upload.addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      originalImage.onload = () => {
-        originalWidth = originalImage.width;
-        originalHeight = originalImage.height;
-        drawImage(originalWidth, originalHeight);
-        document.getElementById("width").value = originalWidth;
-        document.getElementById("height").value = originalHeight;
-      };
-      originalImage.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-
-  function drawImage(width, height) {
-    canvas.width = width;
-    canvas.height = height;
-    ctx.drawImage(originalImage, 0, 0, width, height);
-  }
-
-  document.getElementById("scaleBtn").addEventListener("click", () => {
-    const mode = document.querySelector("input[name='mode']:checked").value;
-    let newWidth = originalWidth;
-    let newHeight = originalHeight;
-
-    if (mode === "percent") {
-      const percent = parseFloat(document.getElementById("scalePercent").value) || 100;
-      newWidth = (originalWidth * percent) / 100;
-      newHeight = (originalHeight * percent) / 100;
-    } else {
-      const keepAspect = document.getElementById("lockAspect").checked;
-      const inputWidth = parseInt(document.getElementById("width").value) || originalWidth;
-      const inputHeight = parseInt(document.getElementById("height").value) || originalHeight;
-
-      if (keepAspect) {
-        const aspectRatio = originalHeight / originalWidth;
-        newWidth = inputWidth;
-        newHeight = Math.round(newWidth * aspectRatio);
-        document.getElementById("height").value = newHeight;
-      } else {
-        newWidth = inputWidth;
-        newHeight = inputHeight;
-      }
-    }
-
-    drawImage(newWidth, newHeight);
-  });
-
-  document.getElementById("download").addEventListener("click", () => {
-    const link = document.createElement("a");
-    link.download = "imagen-escalada.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  });
-
-  // Ajustar altura automáticamente si "mantener aspecto" está activo
-  document.getElementById("width").addEventListener("input", () => {
-    const keepAspect = document.getElementById("lockAspect").checked;
-    if (keepAspect && originalWidth && originalHeight) {
-      const inputWidth = parseInt(document.getElementById("width").value) || originalWidth;
-      const aspectRatio = originalHeight / originalWidth;
-      const autoHeight = Math.round(inputWidth * aspectRatio);
-      document.getElementById("height").value = autoHeight;
-    }
-  });
-</script>
+<ScalePage texts={texts} />

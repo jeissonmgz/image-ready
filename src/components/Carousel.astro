@@ -1,7 +1,7 @@
 ---
 interface Props {
 	id: string;
-	height: "auto" | string;
+	height: 'auto' | string;
 }
 
 const { id, height } = Astro.props;
@@ -72,7 +72,7 @@ const { id, height } = Astro.props;
 			const incrementScroll = futurePosition - actualPosition;
 			carousel?.scrollBy({ left: incrementScroll, behavior: 'smooth' });
 			const futurePositionLastPixel = futurePosition + carousel?.clientWidth;
-			if (isNaN (futurePositionLastPixel) || futurePositionLastPixel >= carousel.scrollWidth) {
+			if (isNaN(futurePositionLastPixel) || futurePositionLastPixel >= carousel.scrollWidth) {
 				nextButton.classList.remove('bg-gradient-to-br');
 				nextButton.classList.add('btn-carousel--inactive');
 			} else {
@@ -103,25 +103,26 @@ const { id, height } = Astro.props;
 		});
 	});
 
-	const observerCarousel = (carousel: HTMLDivElement) => new MutationObserver(() => {
-		const nextButton = getNextButton(carousel);
-		nextButton.classList.remove('bg-gradient-to-br');
-		nextButton.classList.add('btn-carousel--inactive');
-		const prevButton = getPrevButton(carousel);
-		if (carousel.scrollWidth === carousel?.clientWidth) {
-			prevButton.classList.remove('bg-gradient-to-br');
-			prevButton.classList.add('btn-carousel--inactive');
-		} else {
-			prevButton.classList.add('bg-gradient-to-br');
-			prevButton.classList.remove('btn-carousel--inactive');
-		}
-		const cardWidth = getCardWidth(carousel);
-		carousel?.scrollBy({ left: cardWidth, behavior: 'smooth' });
-		setTimeout(()=> carousel?.scrollBy({ left: cardWidth, behavior: 'smooth' }), 200)
-	});
+	const observerCarousel = (carousel: HTMLDivElement) =>
+		new MutationObserver(() => {
+			const nextButton = getNextButton(carousel);
+			nextButton.classList.remove('bg-gradient-to-br');
+			nextButton.classList.add('btn-carousel--inactive');
+			const prevButton = getPrevButton(carousel);
+			if (carousel.scrollWidth === carousel?.clientWidth) {
+				prevButton.classList.remove('bg-gradient-to-br');
+				prevButton.classList.add('btn-carousel--inactive');
+			} else {
+				prevButton.classList.add('bg-gradient-to-br');
+				prevButton.classList.remove('btn-carousel--inactive');
+			}
+			const cardWidth = getCardWidth(carousel);
+			carousel?.scrollBy({ left: cardWidth, behavior: 'smooth' });
+			setTimeout(() => carousel?.scrollBy({ left: cardWidth, behavior: 'smooth' }), 200);
+		});
 
 	carousels?.forEach((carousel) => {
-    	observerCarousel(carousel as HTMLDivElement).observe(carousel, {
+		observerCarousel(carousel as HTMLDivElement).observe(carousel, {
 			childList: true,
 			subtree: true, // por si se insertan hijos dentro de hijos
 		});

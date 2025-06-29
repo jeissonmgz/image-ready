@@ -7,17 +7,14 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-
 ---
-<a
-	href={`${getRelativeLocaleUrl(lang, "")}`}
-    aria-label="Home"
->
-    <div class="outer-circle">
-        <Avatar
-            class="rounded-full bg-gradient-to-br from-action-dark to-action-light"
-            width={100}
-            height={100}
-        />
-    </div>
+
+<a href={`${getRelativeLocaleUrl(lang, '')}`} aria-label="Home">
+	<div class="outer-circle">
+		<Avatar
+			class="rounded-full bg-gradient-to-br from-action-dark to-action-light"
+			width={100}
+			height={100}
+		/>
+	</div>
 </a>

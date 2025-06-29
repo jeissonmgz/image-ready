@@ -1,28 +1,27 @@
 ---
-
 interface Props {
 	format: string;
 	mymetype: string;
-    texts: {
-        language: string,
-        title: string,
-        subtitle1: string,
-        subtitle2: string,
-        subtitle3: string,
-        convert: string,
-        uploadTitle: string,
-        uploadMessage: string,
-        uploadedTitle: string,
-        uploadedButton: string,
-        copyright: string,
-    }
+	texts: {
+		language: string;
+		title: string;
+		subtitle1: string;
+		subtitle2: string;
+		subtitle3: string;
+		convert: string;
+		uploadTitle: string;
+		uploadMessage: string;
+		uploadedTitle: string;
+		uploadedButton: string;
+		copyright: string;
+	};
 }
 
 import '../styles/global.css';
 import Layout from '../layouts/Layout.astro';
 import Anchor from '../components/Anchor.astro';
-import Carousel from "../components/Carousel.astro";
-import Button from "../components/Button.astro";
+import Carousel from '../components/Carousel.astro';
+import Button from '../components/Button.astro';
 import Logo from './Logo.astro';
 
 export const formatsSupported = [
@@ -31,277 +30,273 @@ export const formatsSupported = [
 	{ format: 'jpeg', mymetype: 'image/jpeg' },
 ];
 
-
-export const formatsOriginals = [
-	'webp',
-	'png',
-	'jpeg',
-	'svg',
-	'gif'
-];
+export const formatsOriginals = ['webp', 'png', 'jpeg', 'svg', 'gif'];
 
 const { format, mymetype, texts } = Astro.props;
 ---
 
 <Layout title={`${texts.title} ${format}`} language={texts.language} description={texts.title}>
-<div
-	id="app"
-	class="min-h-screen"
-	data-format={format}
-	data-mymetype={mymetype}
->
-	<main class="w-full pt-4 lg:pt-0 flex justify-center">
-		<div class="flex flex-col lg:flex-row gap-8">
-			<section class="flex flex-col items-center lg:max-w-xs px-4 justify-center gap-4">
-				<div class="flex flex-col items-center gap-2">
-					<Logo lang={texts.language} />
-					<h1
-						class="text-center lg:text-left font-bold text-4xl leading-12 bg-gradient-to-br from-action-dark to-action-light bg-clip-text text-transparent-fill"
-					>
-						{texts.title} {format}
-					</h1>
-				</div>
-				<p class="text-m">
-					{texts.subtitle1} {formatsOriginals.filter(f => f !== format).join(', ')} {texts.subtitle2} {format} {texts.subtitle3}
-				</p>
-				
-				<p class="pt-6 text-center lg:text-left w-full">{texts.convert}</p>
-				<div class="flex gap-6 justify-center lg:justify-start w-full">
-					{
-						formatsSupported
-							.filter((item) => item.format !== format)
-							.map((item) => (
-								<Anchor target="_self" href={`/convert/${item.format}`} size="lg" lang={texts.language}>
-									{item.format}
-								</Anchor>
-							))
-					}
-				</div>
-			</section>
-			<div class="px-4">
-				<section class="pt-8 lg-pt-0">
-					<h2 class="text-primary tracking-wide font-bold text-3xl text-left my-4">
-						{texts.uploadTitle}
-					</h2>
-					<div class="flex items-center justify-center w-full pressed rounded-3xl py-4">
-						<label
-							for="file-upload"
-							class="flex flex-col items-center justify-center w-full h-32 rounded-2xl cursor-pointer transition-colors"
+	<div id="app" class="min-h-screen" data-format={format} data-mymetype={mymetype}>
+		<main class="w-full pt-4 lg:pt-0 flex justify-center">
+			<div class="flex flex-col lg:flex-row gap-8">
+				<section class="flex flex-col items-center lg:max-w-xs px-4 justify-center gap-4">
+					<div class="flex flex-col items-center gap-2">
+						<Logo lang={texts.language} />
+						<h1
+							class="text-center lg:text-left font-bold text-4xl leading-12 bg-gradient-to-br from-action-dark to-action-light bg-clip-text text-transparent-fill"
 						>
-							<div class="flex flex-col items-center justify-center pt-5 pb-6">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									class="w-8 h-8 mb-4"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 16 16"
-								>
-									<path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M6.354 9.854a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 8.707V12.5a.5.5 0 0 1-1 0V8.707z"/>
-								</svg>
-								<p class="mb-2 text-m">
-									<span class="font-semibold">{texts.uploadMessage}</span>
-								</p>
-								<p class="text-xs">{formatsOriginals.filter(f => f !== format).join(', ')}, etc.</p>
-							</div>
-							<input id="file-upload" multiple type="file" class="hidden" />
-						</label>
+							{texts.title}
+							{format}
+						</h1>
+					</div>
+					<p class="text-m">
+						{texts.subtitle1}
+						{formatsOriginals.filter((f) => f !== format).join(', ')}
+						{texts.subtitle2}
+						{format}
+						{texts.subtitle3}
+					</p>
+
+					<p class="pt-6 text-center lg:text-left w-full">{texts.convert}</p>
+					<div class="flex gap-6 justify-center lg:justify-start w-full">
+						{
+							formatsSupported
+								.filter((item) => item.format !== format)
+								.map((item) => (
+									<Anchor
+										target="_self"
+										href={`/convert/${item.format}`}
+										size="lg"
+										lang={texts.language}
+									>
+										{item.format}
+									</Anchor>
+								))
+						}
 					</div>
 				</section>
-				<section class="pt-8 lg-pt-0" id="sectionUploads">
-					<h2 class="text-primary tracking-wide font-bold text-3xl text-left my-4">
+				<div class="px-4">
+					<section class="pt-8 lg-pt-0">
+						<h2 class="text-primary tracking-wide font-bold text-3xl text-left my-4">
+							{texts.uploadTitle}
+						</h2>
+						<div class="flex items-center justify-center w-full pressed rounded-3xl py-4">
+							<label
+								for="file-upload"
+								class="flex flex-col items-center justify-center w-full h-32 rounded-2xl cursor-pointer transition-colors"
+							>
+								<div class="flex flex-col items-center justify-center pt-5 pb-6">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="w-8 h-8 mb-4"
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 16 16"
+									>
+										<path
+											d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M6.354 9.854a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 8.707V12.5a.5.5 0 0 1-1 0V8.707z"
+										></path>
+									</svg>
+									<p class="mb-2 text-m">
+										<span class="font-semibold">{texts.uploadMessage}</span>
+									</p>
+									<p class="text-xs">
+										{formatsOriginals.filter((f) => f !== format).join(', ')}, etc.
+									</p>
+								</div>
+								<input id="file-upload" multiple type="file" class="hidden" />
+							</label>
+						</div>
+					</section>
+					<section class="pt-8 lg-pt-0" id="sectionUploads">
+						<h2 class="text-primary tracking-wide font-bold text-3xl text-left my-4">
 							{texts.uploadedTitle}
 						</h2>
-						<Carousel id="previews" height="220px"></Carousel>
-						<div
-							class="w-full flex justify-center pt-4"
-						>	
-							<Button
-								id="download-all"
-								size="lg"
-								disabled={true}
-							>
+						<Carousel id="previews" height="220px" />
+						<div class="w-full flex justify-center pt-4">
+							<Button id="download-all" size="lg" disabled={true}>
 								{texts.uploadedButton}
 							</Button>
 						</div>
-				</section>
+					</section>
+				</div>
 			</div>
-		</div>
-	</main>
-	<footer class="text-center py-8 text-sm text-neutral">
-		&copy; 2025 Readyfor.work - {texts.copyright}.
-	</footer>
-</div>
+		</main>
+		<footer class="text-center py-8 text-sm text-neutral">
+			&copy; 2025 Readyfor.work - {texts.copyright}.
+		</footer>
+	</div>
 
-<script>
-	import type { JSX } from 'astro/jsx-runtime';
+	<script>
+		import type { JSX } from 'astro/jsx-runtime';
 
-	import JSZip from 'jszip';
-	import { saveAs } from 'file-saver';
+		import JSZip from 'jszip';
+		import { saveAs } from 'file-saver';
 
-	const appContainer = document.querySelector('#app');
+		const appContainer = document.querySelector('#app');
 
-	let refs = {
-		imagePreviews: document.querySelector('#previews'),
-		fileSelector: document.querySelector('input[type=file]'),
-		format: appContainer?.getAttribute('data-format') || 'webp',
-		mymetype: appContainer?.getAttribute('data-mymetype') || 'image/webp',
-	};
+		let refs = {
+			imagePreviews: document.querySelector('#previews'),
+			fileSelector: document.querySelector('input[type=file]'),
+			format: appContainer?.getAttribute('data-format') || 'webp',
+			mymetype: appContainer?.getAttribute('data-mymetype') || 'image/webp',
+		};
 
-	function addImageBox(container: JSX.Element) {
-		const progressBox = document.createElement('div');
-		progressBox.setAttribute("class", "skeleton")
+		function addImageBox(container: JSX.Element) {
+			const progressBox = document.createElement('div');
+			progressBox.setAttribute('class', 'skeleton');
 
-		const itemCarouselCard = document.createElement('div');
-		itemCarouselCard.setAttribute('class', 'card');
-		itemCarouselCard.appendChild(progressBox);
+			const itemCarouselCard = document.createElement('div');
+			itemCarouselCard.setAttribute('class', 'card');
+			itemCarouselCard.appendChild(progressBox);
 
-		const itemCarousel = document.createElement('div');
-		itemCarousel.setAttribute('class', 'item-carousel');
-		itemCarousel.appendChild(itemCarouselCard);
+			const itemCarousel = document.createElement('div');
+			itemCarousel.setAttribute('class', 'item-carousel');
+			itemCarousel.appendChild(itemCarouselCard);
 
-		container.appendChild(itemCarousel);
-		return itemCarousel;
-	}
-
-	let convertedImages: { url: string; filename: string }[] = [];
-
-	function processFile(file: File) {
-		if (!file) {
-			return;
+			container.appendChild(itemCarousel);
+			return itemCarousel;
 		}
 
-		let imageBox = addImageBox(refs.imagePreviews);
+		let convertedImages: { url: string; filename: string }[] = [];
 
-		// Load the data into an image
-		new Promise(function (resolve, reject) {
-			let rawImage = new Image();
-			rawImage.addEventListener('load', () => resolve(rawImage));
-			rawImage.src = URL.createObjectURL(file);
-		})
-			.then(function (rawImage: any) {
-				return new Promise(function (resolve, reject) {
-					let canvas = document.createElement('canvas');
-					let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+		function processFile(file: File) {
+			if (!file) {
+				return;
+			}
 
-					canvas.width = rawImage.width;
-					canvas.height = rawImage.height;
-					ctx.drawImage(rawImage, 0, 0);
+			let imageBox = addImageBox(refs.imagePreviews);
 
-					canvas.toBlob(function (blob) {
-						const url = URL.createObjectURL(blob);
-						convertedImages.push({
-							url,
-							filename: `${file.name}-image-ready-for-work.${refs.format}`,
-						});
-						resolve(url);
-						onImageConverted();
-					}, `${refs.mymetype}`);
-				});
+			// Load the data into an image
+			new Promise(function (resolve, reject) {
+				let rawImage = new Image();
+				rawImage.addEventListener('load', () => resolve(rawImage));
+				rawImage.src = URL.createObjectURL(file);
 			})
-			.then(function (imageURL: any) {
-				return new Promise(function (resolve, reject) {
-					let scaledImg = new Image();
-					scaledImg.addEventListener('load', () => {
-						resolve({ imageURL, scaledImg });
+				.then(function (rawImage: any) {
+					return new Promise(function (resolve, reject) {
+						let canvas = document.createElement('canvas');
+						let ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+
+						canvas.width = rawImage.width;
+						canvas.height = rawImage.height;
+						ctx.drawImage(rawImage, 0, 0);
+
+						canvas.toBlob(function (blob) {
+							const url = URL.createObjectURL(blob);
+							convertedImages.push({
+								url,
+								filename: `${file.name}-image-ready-for-work.${refs.format}`,
+							});
+							resolve(url);
+							onImageConverted();
+						}, `${refs.mymetype}`);
 					});
+				})
+				.then(function (imageURL: any) {
+					return new Promise(function (resolve, reject) {
+						let scaledImg = new Image();
+						scaledImg.addEventListener('load', () => {
+							resolve({ imageURL, scaledImg });
+						});
 
-					scaledImg.setAttribute('src', imageURL);
-					scaledImg.setAttribute('width', '200');
-					scaledImg.setAttribute('height', '200');
-					scaledImg.setAttribute('class', 'image-scaled');
+						scaledImg.setAttribute('src', imageURL);
+						scaledImg.setAttribute('width', '200');
+						scaledImg.setAttribute('height', '200');
+						scaledImg.setAttribute('class', 'image-scaled');
+					});
+				})
+				.then(function (data: any) {
+					let imageLink = document.createElement('a');
+					imageLink.setAttribute('href', data.imageURL);
+					imageLink.setAttribute('download', `${file.name}-image-ready-for-work.webp`);
+					imageLink.appendChild(data.scaledImg);
+
+					let itemCarouselCard = document.createElement('div');
+					itemCarouselCard.setAttribute('class', 'card');
+					itemCarouselCard.appendChild(imageLink);
+
+					let itemCarousel = document.createElement('div');
+					itemCarousel.setAttribute('class', 'item-carousel');
+					itemCarousel.appendChild(itemCarouselCard);
+
+					imageBox.innerHTML = '';
+					imageBox.appendChild(itemCarousel);
 				});
-			})
-			.then(function (data: any) {
-				let imageLink = document.createElement('a');
-				imageLink.setAttribute('href', data.imageURL);
-				imageLink.setAttribute('download', `${file.name}-image-ready-for-work.webp`);
-				imageLink.appendChild(data.scaledImg);
-
-				let itemCarouselCard = document.createElement('div');
-				itemCarouselCard.setAttribute('class', 'card');
-				itemCarouselCard.appendChild(imageLink);
-
-				let itemCarousel = document.createElement('div');
-				itemCarousel.setAttribute('class', 'item-carousel');
-				itemCarousel.appendChild(itemCarouselCard);
-				
-				imageBox.innerHTML = '';
-				imageBox.appendChild(itemCarousel);
-			});
-	}
-
-	function processFiles(files) {
-		for (let file of files) {
-			processFile(file);
 		}
-	}
 
-	function fileSelectorChanged() {
-		document.getElementById("sectionUploads")?.scrollIntoView({ 
-			behavior: 'smooth' 
+		function processFiles(files) {
+			for (let file of files) {
+				processFile(file);
+			}
+		}
+
+		function fileSelectorChanged() {
+			document.getElementById('sectionUploads')?.scrollIntoView({
+				behavior: 'smooth',
+			});
+			processFiles(refs.fileSelector.files);
+			refs.fileSelector.value = '';
+		}
+
+		refs.fileSelector.addEventListener('change', fileSelectorChanged);
+
+		// Set up Drag and Drop
+		function dragenter(e) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
+
+		function dragover(e) {
+			e.stopPropagation();
+			e.preventDefault();
+		}
+
+		function drop(callback, e) {
+			e.stopPropagation();
+			e.preventDefault();
+			callback(e.dataTransfer.files);
+		}
+
+		function setDragDrop(area: JSX.Element, callback) {
+			area.addEventListener('dragenter', dragenter, false);
+			area.addEventListener('dragover', dragover, false);
+			area.addEventListener(
+				'drop',
+				function (e) {
+					drop(callback, e);
+				},
+				false
+			);
+		}
+		setDragDrop(document.documentElement, processFiles);
+
+		const downloadAllBtn = document.getElementById('download-all') as HTMLButtonElement;
+
+		function updateDownloadButtonState() {
+			downloadAllBtn.disabled = convertedImages.length === 0;
+		}
+
+		downloadAllBtn.addEventListener('click', async () => {
+			const zip = new JSZip();
+
+			const promises = convertedImages.map(async ({ url, filename }) => {
+				const res = await fetch(url);
+				const blob = await res.blob();
+				zip.file(filename, blob);
+			});
+
+			await Promise.all(promises);
+			const content = await zip.generateAsync({ type: 'blob' });
+			saveAs(content, 'converted-images.zip');
 		});
-		processFiles(refs.fileSelector.files);
-		refs.fileSelector.value = '';
-	}
 
-	refs.fileSelector.addEventListener('change', fileSelectorChanged);
-
-	// Set up Drag and Drop
-	function dragenter(e) {
-		e.stopPropagation();
-		e.preventDefault();
-	}
-
-	function dragover(e) {
-		e.stopPropagation();
-		e.preventDefault();
-	}
-
-	function drop(callback, e) {
-		e.stopPropagation();
-		e.preventDefault();
-		callback(e.dataTransfer.files);
-	}
-
-	function setDragDrop(area: JSX.Element, callback) {
-		area.addEventListener('dragenter', dragenter, false);
-		area.addEventListener('dragover', dragover, false);
-		area.addEventListener(
-			'drop',
-			function (e) {
-				drop(callback, e);
-			},
-			false
-		);
-	}
-	setDragDrop(document.documentElement, processFiles);
-
-	const downloadAllBtn = document.getElementById('download-all') as HTMLButtonElement;
-
-	function updateDownloadButtonState() {
-		downloadAllBtn.disabled = convertedImages.length === 0;
-	}
-
-	downloadAllBtn.addEventListener('click', async () => {
-		const zip = new JSZip();
-
-		const promises = convertedImages.map(async ({ url, filename }) => {
-			const res = await fetch(url);
-			const blob = await res.blob();
-			zip.file(filename, blob);
-		});
-
-		await Promise.all(promises);
-		const content = await zip.generateAsync({ type: 'blob' });
-		saveAs(content, 'converted-images.zip');
-	});
-
-	// Llama esta función después de cada archivo convertido
-	function onImageConverted() {
-		updateDownloadButtonState();
-		//notify uploaded
-	}
-</script>
+		// Llama esta función después de cada archivo convertido
+		function onImageConverted() {
+			updateDownloadButtonState();
+			//notify uploaded
+		}
+	</script>
 	<style is:global>
 		.image-scaled {
 			max-height: 200px;
