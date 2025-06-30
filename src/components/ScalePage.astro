@@ -3,6 +3,7 @@ interface Props {
 	texts: {
 		language: string;
 		title: string;
+		description: string;
 		inputs: {
 			titleUpload: string;
 			uploadMessage: string;
@@ -21,11 +22,15 @@ interface Props {
 }
 export const formatsOriginals = ['webp', 'png', 'jpeg', 'svg', 'gif'];
 import Layout from '../layouts/Layout.astro';
+import Radio from '../components/Radio.astro';
+import Button from '../components/Button.astro';
+import Check from '../components/Check.astro';
+import InputField from '../components/InputField.astro';
 import Logo from './Logo.astro';
 const { texts } = Astro.props;
 ---
 
-<Layout title={`${texts.title}`} language={texts.language} description={texts.title}>
+<Layout title={`${texts.title}`} language={texts.language} description={texts.description}>
 	<main class="w-full pt-4 lg:pt-0 flex justify-center">
 		<div class="flex flex-col lg:flex-row gap-8">
 			<section class="flex flex-col items-center lg:max-w-xs px-4 justify-center gap-4">
@@ -37,6 +42,9 @@ const { texts } = Astro.props;
 						{texts.title}
 					</h1>
 				</div>
+				<p class="text-m">
+					{texts.description}
+				</p>
 			</section>
 			<div class="px-4">
 				<section class="pt-8 lg-pt-0">
@@ -73,42 +81,73 @@ const { texts } = Astro.props;
 					<h2 class="text-primary tracking-wide font-bold text-3xl text-left my-4">
 						{texts.inputs.actionsTitle}
 					</h2>
-					<label>
-						<input type="radio" name="mode" value="percent" checked />
-						{texts.inputs.percentage}
-					</label>
-					<input type="number" id="scalePercent" value="100" min="1" /> %
-					<br />
-
-					<label>
-						<input type="radio" name="mode" value="pixels" />
-						{texts.inputs.pixels}
-					</label>
-					<br />
-					{texts.inputs.width}: <input type="number" id="width" /> px
-					<br />
-					{texts.inputs.height}: <input type="number" id="height" /> px
-					<br />
-					<label>
-						<input type="checkbox" id="lockAspect" checked />
-						{texts.inputs.mantainAspect}
-					</label>
-					<br /><br />
-
-					<button id="scaleBtn">{texts.inputs.action}</button>
-					<button id="download">{texts.inputs.download}</button>
-				</section>
-				<section class="pt-8 lg-pt-0" id="sectionUploads">
-					<h2 class="text-primary tracking-wide font-bold text-3xl text-left my-4">
-						{texts.inputs.uploadedTitle}
-					</h2>
-					<div
-						style="width: 100%; max-width: 800px; max-height: 600px; overflow: auto; border: 2px solid #333;"
-					>
-						<div style="transform-origin: top left;" id="canvas-container">
-							<canvas id="canvas" style="border:1px solid #ccc;"></canvas>
+					<div class="flex flex-col lg:flex-row gap-4">
+						<div>
+							<div id="image"></div>
+							<canvas id="canvas" class="hidden" style="border:1px solid #ccc;"></canvas>
+						</div>
+						<div class="lg:w-lg">
+							<div class="py-4">
+								<Radio
+									id="scaleMethod"
+									options={[
+										{
+											value: 'percent',
+											label: texts.inputs.percentage,
+										},
+										{
+											value: 'pixels',
+											label: texts.inputs.pixels,
+										},
+									]}
+									name="mode"
+									selected="percent"
+									size="lg"
+									disabled={false}
+								/>
+							</div>
+							<div id="scalePercentContainer">
+								<InputField
+									id="scalePercent"
+									name="scalePercent"
+									type="number"
+									size="md"
+									min="0.0001"
+									labelBefore={`${texts.inputs.percentage}:`}
+									labelAfter="%"
+								/>
+							</div>
+							<div id="scalePixelsContainer" class="hidden">
+								<InputField
+									id="width"
+									name="width"
+									type="number"
+									size="md"
+									labelBefore={`${texts.inputs.width}:`}
+									labelAfter="px"
+								/>
+								<InputField
+									id="height"
+									name="height"
+									type="number"
+									size="md"
+									labelBefore={`${texts.inputs.height}:`}
+									labelAfter="px"
+								/>
+								<Check
+									id="lockAspect"
+									name="lockAspect"
+									label={texts.inputs.mantainAspect}
+									selected={true}
+								/>
+							</div>
 						</div>
 					</div>
+				</section>
+				<section class="flex gap-4 pt-4">
+					<Button id="download" size="lg" disabled={true}>
+						{texts.inputs.download}
+					</Button>
 				</section>
 			</div>
 		</div>
@@ -140,8 +179,20 @@ const { texts } = Astro.props;
 					document.getElementById('height').value = originalHeight;
 				};
 				originalImage.src = event.target.result;
+
+				let scaledImg = new Image();
+				scaledImg.setAttribute('src', event.target.result);
+				scaledImg.setAttribute('width', '200');
+				scaledImg.setAttribute('height', '200');
+				scaledImg.setAttribute('class', 'image-scaled card');
+				const imageContainer = document.getElementById('image');
+				if (imageContainer) {
+					imageContainer.innerHTML = '';
+					imageContainer.appendChild(scaledImg);
+				}
 			};
 			reader.readAsDataURL(file);
+			document.getElementById('download').disabled = false;
 		});
 
 		function drawImage(width, height) {
@@ -150,7 +201,7 @@ const { texts } = Astro.props;
 			ctx.drawImage(originalImage, 0, 0, width, height);
 		}
 
-		document.getElementById('scaleBtn').addEventListener('click', () => {
+		document.getElementById('download').addEventListener('click', () => {
 			const mode = document.querySelector("input[name='mode']:checked").value;
 			let newWidth = originalWidth;
 			let newHeight = originalHeight;
@@ -176,9 +227,6 @@ const { texts } = Astro.props;
 			}
 
 			drawImage(newWidth, newHeight);
-		});
-
-		document.getElementById('download').addEventListener('click', () => {
 			const link = document.createElement('a');
 			link.download = 'imagen-escalada.png';
 			link.href = canvas.toDataURL('image/png');
@@ -195,26 +243,47 @@ const { texts } = Astro.props;
 				document.getElementById('height').value = autoHeight;
 			}
 		});
-	</script>
-	<script>
-		const container = document.getElementById('canvas-container');
-		let scale = 1;
 
-		function setZoom(newScale) {
-			scale = newScale;
-			container.style.transform = `scale(${scale})`;
+		const radios = document.querySelectorAll('input[name="mode"]');
+
+		radios.forEach((radio) => {
+			radio.addEventListener('change', (e) => {
+				if (e.target.checked) {
+					const { value } = e.target;
+					if (value === 'percent') {
+						document.getElementById('scalePercentContainer').classList.remove('hidden');
+						document.getElementById('scalePixelsContainer').classList.add('hidden');
+					}
+					if (value === 'pixels') {
+						document.getElementById('scalePercentContainer').classList.add('hidden');
+						document.getElementById('scalePixelsContainer').classList.remove('hidden');
+					}
+				}
+			});
+		});
+	</script>
+	<style>
+		#image {
+			min-width: 200px;
+			min-height: 200px;
+		}
+	</style>
+	<style is:global>
+		.image-scaled {
+			max-height: 200px;
+			max-width: 200px;
+			object-fit: contain;
+			width: auto;
+			height: auto;
+			padding: 0.5em;
+			border-radius: 0.5em;
 		}
 
-		// Zoom con la rueda del mouse
-		container.parentElement.addEventListener('wheel', (e) => {
-			e.preventDefault();
-			const delta = e.deltaY > 0 ? -0.1 : 0.1;
-			setZoom(Math.min(Math.max(0.5, scale + delta), 3));
-		});
-
-		// Puedes agregar botones opcionales
-		// Ejemplo:
-		// <button onclick="setZoom(scale + 0.1)">+</button>
-		// <button onclick="setZoom(scale - 0.1)">-</button>
-	</script>
+		.card {
+			background: #212121;
+			box-shadow:
+				8px 8px 16px rgb(0, 0, 0, 0.5),
+				-8px -8px 16px rgb(255, 255, 255, 0.1);
+		}
+	</style>
 </Layout>

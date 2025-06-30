@@ -1,0 +1,68 @@
+---
+interface Props {
+	id: string;
+	name: string;
+	selected: boolean;
+	label: string;
+}
+
+const { id, label, name, selected  } = Astro.props;
+
+---
+
+<label class="label">
+    <div class="toggle">
+        <input class="toggle-state" type="checkbox" id={id} name={name} checked={selected}>
+        <div class="indicator"></div>
+    </div>
+	{label}
+</label>
+
+<style>
+	@reference "../styles/global.css";
+
+	/* From Uiverse.io by mobinkakei */ 
+	.label {
+		display: inline-flex;
+		align-items: center;
+		cursor: pointer;
+		@apply gap-2 text-default;
+	}
+
+	.label-text {
+		margin-left: 16px;
+	}
+
+	.toggle {
+		isolation: isolate;
+		position: relative;
+		height: 30px;
+		width: 60px;
+		border-radius: 15px;
+		overflow: hidden;
+		box-shadow: -2px -1px 2px 0px rgb(255 255 255 / 0.4),
+			2px 1px 3px 0px rgb(0 0 0 / 0.5),
+			1px 1px 1px 0px rgb(0 0 0 / 0.5) inset,
+			-1px -1px 1px 0px rgb(255 255 255 / 0.4) inset;
+	}
+
+	.toggle-state {
+		display: none;
+	}
+
+	.indicator {
+		height: 100%;
+		width: 200%;
+		@apply bg-default;
+		border-radius: 15px;
+		transform: translate3d(-75%, 0, 0);
+		transition: transform 0.4s cubic-bezier(0.85, 0.05, 0.18, 1.35);
+		box-shadow: -2px -1px 2px 0px rgb(255 255 255 / 0.4),
+			2px 1px 3px 0px rgb(255 255 255 / 0.4);
+	}
+
+	.toggle-state:checked ~ .indicator {
+		transform: translate3d(25%, 0, 0);
+		@apply bg-action;
+	}
+</style>

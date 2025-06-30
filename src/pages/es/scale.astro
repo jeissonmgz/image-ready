@@ -1,0 +1,26 @@
+---
+import '../../styles/global.css';
+import ScalePage from '../../components/ScalePage.astro';
+const texts = {
+	language: 'es',
+	title: 'Escalar imágen',
+	description:
+		'Escala imágenes gratis en segundos: elige porcentaje o define ancho y alto, manteniendo el aspecto si lo necesitas.',
+	inputs: {
+		titleUpload: 'Subir imágen',
+		uploadMessage: 'Click para subir o arrastra y suelta',
+		uploadedTitle: 'Imágen subida',
+		actionsTitle: 'Escalar',
+		width: 'Ancho',
+		height: 'Alto',
+		percentage: 'Escalar por porcentaje',
+		pixels: 'Escalar por pixeles',
+		mantainAspect: 'Mantener relación ancho x alto',
+		action: 'Escalar imágen',
+		download: 'Descargar imágen escalada',
+	},
+	copyright: 'All rights reserved.',
+};
+---
+
+<ScalePage texts={texts} />

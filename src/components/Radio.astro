@@ -1,0 +1,109 @@
+---
+// RadioGroup.astro
+interface Option {
+	value: string;
+	label: string;
+}
+
+interface Props {
+	id: string;
+	options: Option[];
+	name: string;
+	selected: string;
+	size?: 'sm' | 'md' | 'lg';
+	disabled?: boolean;
+	onChange?: string; // Opcional
+}
+
+const { id, options, name, selected, size = 'md', disabled = false, onChange } = Astro.props;
+
+const height = {
+	sm: 'h-6',
+	md: 'h-8',
+	lg: 'h-10',
+};
+---
+
+<div id={id} class="flex gap-4 flex-wrap">
+	{
+		options.map((option) => (
+			<>
+				<input
+					type="radio"
+					id={`${id}-${option.value}`}
+					name={name}
+					value={option.value}
+					checked={option.value === selected}
+					class={`neu-radio-control`}
+					disabled={disabled}
+					{...(onChange ? { 'on:change': onChange } : {})}
+				/>
+				<label
+					for={`${id}-${option.value}`}
+					class={`neu-radio px-4 font-bold ${height[size]}
+					disabled:bg-none disabled:cursor-not-allowed`}
+				>
+					{option.label}
+				</label>
+			</>
+		))
+	}
+</div>
+
+<style>
+	@reference "../styles/global.css";
+
+	.neu-radio {
+		@apply text-default;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		border: solid #404c5d 1px;
+		border-radius: 5px;
+		font-size: 16px;
+		transition: 500ms;
+	}
+
+	.neu-radio-control {
+		@apply hidden;
+	}
+
+	.neu-radio-control:not(:checked) + .neu-radio {
+		box-shadow:
+			inset 4px 4px 8px rgb(0, 0, 0, 0.4),
+			inset -4px -4px 8px rgb(255, 255, 255, 0.1),
+			4px 4px 8px rgb(0, 0, 0, 0.1),
+			-4px -4px 8px rgb(255, 255, 255, 0.1);
+	}
+
+	.neu-radio-control:not(:checked) + .neu-radio:hover {
+		box-shadow:
+			4px 4px 12px rgb(0 0 0 / 0.5),
+			-4px -4px 12px rgb(255 255 255 / 0.4);
+		transition: 500ms;
+	}
+
+	.neu-radio-control:checked + .neu-radio {
+		@apply bg-gradient-to-br from-action-dark to-action-light text-action-text;
+	}
+
+	.neu-radio-control:checked:hover + .neu-radio {
+		@apply bg-gradient-to-tl;
+	}
+
+	.neu-radio:hover:not(:disabled) {
+		box-shadow:
+			4px 4px 12px rgb(0 0 0 / 0.5),
+			-4px -4px 12px rgb(255 255 255 / 0.4);
+		transition: 500ms;
+	}
+
+	.neu-radio:disabled {
+		box-shadow:
+			inset 2px 2px 4px rgb(0 0 0 / 0.2),
+			inset -2px -2px 4px rgb(255 255 255 / 0.2);
+		@apply text-default;
+		transition: 100ms;
+	}
+</style>

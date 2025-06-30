@@ -17,6 +17,9 @@ interface Props {
 		featureConvert: {
 			title: string;
 		};
+		featureScale: {
+			title: string;
+		};
 		copyright: string;
 	};
 }
@@ -51,6 +54,14 @@ const { texts } = Astro.props;
 						))
 					}
 				</div>
+				<Anchor
+					target="_self"
+					href={`/scale`}
+					size="lg"
+					lang={texts.language}
+				>
+					{texts.featureScale.title}
+				</Anchor>
 			</section>
 			<footer class="text-center py-8 text-sm text-neutral">
 				&copy; 2025 Readyfor.work - {texts.copyright}
