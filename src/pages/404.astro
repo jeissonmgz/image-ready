@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import Logo from "../components/Logo.astro";
+import Layout from "../layouts/Layout.astro";
+import Anchor from '../components/Anchor.astro';
+---
+<Layout title="Image is ready for work" language="en" description="Page not found">
+    <main id="app" class="w-full flex flex-col items-center pt-8">
+        <Logo lang="en" />
+        <h1 id="title" class="font-bold text-4xl">titulo</h1>
+        <p id="subtitle" class="text-xl py-2">descripcion</p>
+        <Anchor
+            target="_self"
+            href={`/`}
+            size="lg"
+            lang={'en'}
+        >
+            <span id="link"></span>
+        </Anchor>
+    </main>
+    <script type="module">
+      const messages = {
+        es: {
+          title: "Página no encontrada",
+          description: "Ups... la página que buscas no existe 🚧",
+          back: "Volver a inicio"
+        },
+        en: {
+          title: "Page not found",
+          description: "Oops... the page you are looking for doesn't exist 🚧",
+          back: "Back to home"
+        }
+      };
+
+      const lang = navigator.language.startsWith("es") ? "es" : "en";
+      const msg = messages[lang];
+
+      document.getElementById("title").innerHTML = msg.title;
+
+      document.getElementById("subtitle").innerHTML = msg.description;
+      document.getElementById("link").innerHTML = msg.back;
+/*
+      const mainAppNode = document.getElementById("app");
+
+      mainAppNode.innerHTML += `
+        <h1>${msg.title}</h1>
+        <p>${msg.description}</p>
+        <a href="/">${msg.back}</a>
+      `;
+      */
+    </script>
+    <footer class="text-center py-8 text-sm text-neutral">
+        &copy; 2025 Readyfor.work
+    </footer>
+</Layout>
